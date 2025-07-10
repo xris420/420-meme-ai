@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>420 MemeAi</title>
+  <link rel="icon" href="/favicon.ico" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9478906907713162" crossorigin="anonymous"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ff00cc, #3333ff, #33ff57);
+      color: white;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-image: url('https://emoji-backgrounds.s3.amazonaws.com/fun-emoji-bg.png');
+      background-size: cover;
+    }
+    h1 {
+      font-size: 3em;
+      margin-top: 0.2em;
+      font-weight: bold;
+    }
+    .logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: url('https://emoji-generator-app-assets.s3.amazonaws.com/ai-smile-icon.png') no-repeat center/cover;
+      margin-bottom: 0.5em;
+    }
+    input, button {
+      padding: 12px;
+      margin: 8px;
+      width: 80%;
+      max-width: 400px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1em;
+    }
+    button {
+      background-color: #00ffff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #meme-output {
+      margin-top: 1em;
+    }
+    .footer {
+      font-size: 0.9em;
+      margin-top: 1.5em;
+    }
+    .pro-btn {
+      font-size: 0.9em;
+      margin-top: 0.5em;
+      color: #fff;
+      background-color: #ff00cc;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo"></div>
+  <h1>420 MemeAi</h1>
+  <input type="text" id="top-text" placeholder="Top text" />
+  <input type="text" id="bottom-text" placeholder="Bottom text" />
+  <input type="file" id="image-upload" accept="image/*" />
+  <button onclick="generateMeme()">GENERATE MEME</button>
+  <button onclick="downloadMeme()">DOWNLOAD</button>
+  <div class="footer">
+    Go Pro to unlock unlimited memes → <a href="https://gumroad.com" class="pro-btn">$3 Plan</a>
+  </div>
+
+  <canvas id="meme-canvas" width="400" height="400" style="display: none;"></canvas>
+  <div id="meme-output"></div>
+
+  <script>
+    function generateMeme() {
+      const canvas = document.getElementById('meme-canvas');
+      const ctx = canvas.getContext('2d');
+      const topText = document.getElementById('top-text').value;
+      const bottomText = document.getElementById('bottom-text').value;
+      const imageInput = document.getElementById('image-upload');
+      const output = document.getElementById('meme-output');
+
+      if (!imageInput.files[0]) return alert("Upload an image");
+      const img = new Image();
+      img.src = URL.createObjectURL(imageInput.files[0]);
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        ctx.font = 'bold 40px Impact';
+        ctx.fillStyle = 'white';
+        ctx.strokeStyle = 'black';
+        ctx.textAlign = 'center';
+        ctx.fillText(topText.toUpperCase(), canvas.width / 2, 50);
+        ctx.strokeText(topText.toUpperCase(), canvas.width / 2, 50);
+        ctx.fillText(bottomText.toUpperCase(), canvas.width / 2, canvas.height - 20);
+        ctx.strokeText(bottomText.toUpperCase(), canvas.width / 2, canvas.height - 20);
+
+        const memeImg = new Image();
+        memeImg.src = canvas.toDataURL();
+        memeImg.style.maxWidth = '100%';
+        output.innerHTML = '';
+        output.appendChild(memeImg);
+      }
+    }
+
+    function downloadMeme() {
+      const canvas = document.getElementById('meme-canvas');
+      const link = document.createElement('a');
+      link.download = '420MemeAi.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+  </script>
+</body>
+</html>
